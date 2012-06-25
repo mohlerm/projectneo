@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="ch.baws.projectneo"
-      android:versionCode="401"
-      android:versionName="4.0.1">
+      android:versionCode="402"
+      android:versionName="4.0.2">
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -16,17 +16,18 @@
             </intent-filter>
         </activity>
         
-        <activity android:name=".ProjectNEOActivity" android:screenOrientation="portrait" android:label="Fun with Buttons">
+        <activity android:name=".ProjectNEOActivity" android:screenOrientation="portrait" android:label="Fun with Buttons" android:icon="@drawable/ic_eff_button">
         </activity>
         <activity android:name=".EffectActivity" android:label="@string/app_name" android:screenOrientation="portrait">
             
         </activity>
-        <activity android:name=".TextActivity" android:label="Marquee" android:screenOrientation="portrait"></activity>
+        <activity android:name=".TextActivity" android:label="Marquee" android:screenOrientation="portrait" android:icon="@drawable/ic_eff_marquee"></activity>
         <service android:name=".sendService.SendService" android:label="SendService" android:enabled="true"></service>
         <activity android:label="Colorfield" android:name=".ColorfieldActivity"></activity>
         <activity android:name=".SnakeActivity" android:label="SnakeActivity"></activity>
-        <activity android:label="Tetris" android:name=".TetrisActivity"></activity>
+        <activity android:label="Tetris" android:name=".TetrisActivity" android:icon="@drawable/ic_eff_tetris"></activity>
         <activity android:name=".HumanSnakeActivity" android:label="Snake!"></activity>
+        <activity android:name="JoystickSnakeActivity" android:label="Snake!" android:icon="@drawable/ic_eff_snake" android:screenOrientation="portrait"></activity>
         
 
     </application>
