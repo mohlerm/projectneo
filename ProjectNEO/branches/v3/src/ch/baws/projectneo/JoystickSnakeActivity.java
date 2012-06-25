@@ -13,7 +13,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class JoystickSnakeActivity extends Activity implements JoystickMovedListener{
+public class JoystickSnakeActivity extends Activity implements JoystickMovedListener, OnClickListener{
 
 	protected static final String TAG = "HSNAKEACTIVITY";
 	protected static final boolean D = true;
@@ -34,6 +34,7 @@ public class JoystickSnakeActivity extends Activity implements JoystickMovedList
 	HumanSnakePlayer effect;
 	
 	JoystickView jstk;
+	Button btn_newgame;
 	
 	
 	@Override
@@ -44,9 +45,10 @@ public class JoystickSnakeActivity extends Activity implements JoystickMovedList
 		setContentView(R.layout.eff_joysticksnake);
 		
 		jstk = (JoystickView) findViewById(R.id.jstk_snake);
+		jstk.setOnJostickMovedListener(this);
 		
-		
-		//jstk.setOnJostickMovedListener();
+		btn_newgame = (Button) findViewById(R.id.btn_newgame);
+		btn_newgame.setOnClickListener(this);
 		mScoreUpdater = new ScoreUpdater();
 		application = (ProjectMORPHEUS) getApplication();
 	}
@@ -86,46 +88,51 @@ public class JoystickSnakeActivity extends Activity implements JoystickMovedList
 	}
 
 	
-	
+	@Override
 	public void onClick(View v) {
-
+		if(v.getId()==R.id.btn_newgame){
+			effect.newGame();
+		}
 		
 	}
 
 	@Override
 	public void OnMoved(int x, int y) {
 		if(D) Log.d(TAG,"Joystick moved!");
+		//determine angle (empiric^^)
 		
-		//determine quadrant
-		
-		double angle = Math.atan2(y, x);
-		
-//		case R.id.snake_up:
-//			//TODO What happens if user clicks UP?
-//			effect.setDir(Dir.UP);
-//			if(D) Log.d(TAG,"go up");
-//			break;
-//		case R.id.snake_down:
-//			//TODO What happens if user clicks DOWN?
-//			effect.setDir(Dir.DOWN);
-//			if(D) Log.d(TAG,"go down");
-//			break;
-//		case R.id.snake_left:
-//			//TODO What happens if user clicks LEFT?
-//			effect.setDir(Dir.LEFT);
-//			if(D) Log.d(TAG,"go left");
-//			break;
-//		case R.id.snake_right:
-//			//TODO What happens if user clicks RIGHT?
-//			effect.setDir(Dir.RIGHT);
-//			if(D) Log.d(TAG,"go rigth");
-//			break;
-//		}
+		double radius = Math.sqrt(x*x+y*y);
+		//dont use the direction if it isn't very precise
+		if(D) Log.d(TAG,"Radius: " + radius);
+		if(radius<50) return;
+		//determine direction
+		if(x<y){
+			if(y>-x){
+				//down
+				if(D) Log.d(TAG,"go Up");
+				effect.setDir(Dir.DOWN);
+			}else{
+				//left
+				if(D) Log.d(TAG,"go Left");
+				effect.setDir(Dir.LEFT);
+			}
+		}else{
+			if(y>-x){
+				//right
+				if(D) Log.d(TAG,"go right");
+				effect.setDir(Dir.RIGHT);
+			}else{
+				//up
+				if(D) Log.d(TAG,"go down");
+				effect.setDir(Dir.UP);
+			}	
+		}
+
 	}
 
 	@Override
 	public void OnReleased() {
-
+		if(D) Log.d(TAG,"+OnRelease+");
 		
 	}
 

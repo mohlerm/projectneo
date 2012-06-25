@@ -1,15 +1,26 @@
 package ch.baws.projectneo.minions;
 
 import android.content.Context;
+import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
+import android.graphics.RadialGradient;
+import android.graphics.Shader;
+import android.graphics.BlurMaskFilter.Blur;
+import android.location.Criteria;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+/**
+ * Implements a primitive JoyStick
+ * @author thomas
+ *
+ */
 public class JoystickView extends View {
 
   // =========================================
@@ -55,21 +66,29 @@ public class JoystickView extends View {
     circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     circlePaint.setColor(Color.GRAY);
     circlePaint.setStrokeWidth(1);
-    circlePaint.setStyle(Paint.Style.FILL_AND_STROKE);
+    circlePaint.setStyle(Paint.Style.STROKE);
+    circlePaint.setStrokeWidth(10);
+    float[] f = {20,10,10,10};
+    circlePaint.setPathEffect(new DashPathEffect(f, 0));
 
     handlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    handlePaint.setColor(Color.DKGRAY);
-    handlePaint.setStrokeWidth(1);
+    handlePaint.setColor(Color.argb(128, 0, 0, 255));
+    handlePaint.setMaskFilter(new BlurMaskFilter(15, Blur.NORMAL));
+    
+    handlePaint.setStrokeWidth(3);
     handlePaint.setStyle(Paint.Style.FILL_AND_STROKE);
 
     innerPadding = 10;
-    sensitivity = 10;
+    sensitivity = 100;
   }
 
   // =========================================
   // Public Methods 
   // =========================================
-
+ /**
+  * Used to set an OnMoved callback method
+  * @param listener an callback for the onMoved event
+  */
   public void setOnJostickMovedListener(JoystickMovedListener listener) {
     this.listener = listener;
   }
@@ -87,7 +106,6 @@ public class JoystickView extends View {
 
     handleRadius = (int)(d * 0.25);
     handleInnerBoundaries = handleRadius;
-    
     setMeasuredDimension(d, d);
   }
 
@@ -111,14 +129,14 @@ public class JoystickView extends View {
   protected void onDraw(Canvas canvas) {
     int px = getMeasuredWidth() / 2;
     int py = getMeasuredHeight() / 2;
-    int radius = Math.min(px, py);
+    float radius = (float) (Math.min(px, py) * 0.7);
 
     // Draw the background
     canvas.drawCircle(px, py, radius - innerPadding, circlePaint);
 
+    handlePaint.setShader(new RadialGradient((float)touchX + px, (float)touchY+py, handleRadius*2, Color.BLUE, Color.argb(128, 0, 0, 255), Shader.TileMode.CLAMP));
     // Draw the handle
-    canvas.drawCircle((int) touchX + px, (int) touchY + py, handleRadius,
-        handlePaint);
+    canvas.drawCircle((int) touchX + px, (int) touchY + py, handleRadius,handlePaint);
 
     canvas.save();
   }
@@ -129,14 +147,20 @@ public class JoystickView extends View {
     if (actionType == MotionEvent.ACTION_MOVE) {
       int px = getMeasuredWidth() / 2;
       int py = getMeasuredHeight() / 2;
-      int radius = Math.min(px, py) - handleInnerBoundaries;
-
+      int radius = Math.min(px, py) - handleInnerBoundaries; //maximum radius of inner thing
+      
       touchX = (event.getX() - px);
-      touchX = Math.max(Math.min(touchX, radius), -radius);
-
       touchY = (event.getY() - py);
-      touchY = Math.max(Math.min(touchY, radius), -radius);
-
+      //touchX = Math.max(Math.min(touchX, radius), -radius);
+      //touchY = Math.max(Math.min(touchY, radius), -radius);
+      
+      double rad = Math.sqrt(touchX*touchX+touchY*touchY);
+      if(Double.compare(rad, radius)>0){
+	      touchX *= radius/rad;
+	      touchY *= radius/rad;
+	      rad = radius;
+      }
+      
       // Coordinates
       Log.d(TAG, "X:" + touchX + "|Y:" + touchY);
 

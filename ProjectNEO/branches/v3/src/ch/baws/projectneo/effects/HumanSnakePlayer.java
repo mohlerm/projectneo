@@ -6,6 +6,7 @@ import android.util.Log;
 
 import ch.baws.projectneo.GeneralUtils;
 import ch.baws.projectneo.HumanSnakeActivity;
+import ch.baws.projectneo.JoystickSnakeActivity;
 import ch.baws.projectneo.R;
 import ch.baws.projectneo.SnakeActivity;
 import ch.baws.projectneo.frameGenerator.Frame;
@@ -115,7 +116,7 @@ public class HumanSnakePlayer extends Effect{
 				if(head.x==food.x && head.y==food.y){
 					score++;
 					food.generate(); // new food
-					if(SPEED>50) this.setSpeed(this.SPEED-30); //increase Speed!
+					if(SPEED>50) this.setSpeed(this.SPEED-20); //increase Speed!
 				}else{ // loose the tail pixel
 					BodyPart temp=head;
 					while(temp.nextBody.nextBody!=null){ 
@@ -156,6 +157,7 @@ public class HumanSnakePlayer extends Effect{
 				int[][] tmparray = GeneralUtils.getEmpty8x8();
 				BodyPart temp = head;
 				if(D) Log.d(TAG,"GET ARRAY: starting");
+				tmparray[food.x][food.y] = COLOR_FOOD;
 				while(temp!=null){
 					if(D) Log.d(TAG,"GET ARRAY: fill 1  temp.x:" + temp.x + " temp.y:" + temp.y);
 					tmparray[temp.x][temp.y] = COLOR_SNAKE; //RED
@@ -163,7 +165,6 @@ public class HumanSnakePlayer extends Effect{
 					temp = temp.nextBody;
 					if(D) Log.d(TAG,"GET ARRAY: fill 3");
 				}
-				tmparray[food.x][food.y] = COLOR_FOOD;
 				array = tmparray;
 				if(D) Log.d(TAG,"GET ARRAY: finish, set food");
 				
@@ -205,9 +206,9 @@ public class HumanSnakePlayer extends Effect{
 	private Snake snake;
 	
 	public HumanSnakePlayer(){
-		super("ThomasR", "SnakeV2");
+		super("ThomasR", "Snake!");
 		this.icon = R.drawable.ic_eff_snake; //TODO cool icon!
-		this.activity = HumanSnakeActivity.class;
+		this.activity = JoystickSnakeActivity.class; //HumanSnakeActivity.class;
 		snake = new Snake();
 	}
 	
@@ -219,12 +220,18 @@ public class HumanSnakePlayer extends Effect{
 	public void setDir(Dir dir) {
 		if(snake.GAMEOVER){
 			if(D) Log.d(TAG, "GameOver, new snake.");
-			snake = new Snake();
-			snake.start();
 		}else{
 			snake.setDir(dir);
 		}
 	}
+	
+	public void newGame(){
+		if(D) Log.d(TAG, "GameOver, new snake.");
+		snake.exit();
+		snake = new Snake();
+		snake.start();
+	}
+	
 	
 	public int getScore(){
 		return snake.score;
