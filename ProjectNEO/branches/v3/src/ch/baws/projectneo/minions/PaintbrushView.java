@@ -70,8 +70,8 @@ public class PaintbrushView extends View {
     int px = getMeasuredWidth() / 2;
     int py = getMeasuredHeight() / 2;
     deskPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    deskPaint.setColor(Color.GRAY);
-    deskPaint.setStrokeWidth(1);
+    deskPaint.setColor(Color.TRANSPARENT);
+    deskPaint.setStrokeWidth(10);
     deskPaint.setStyle(Paint.Style.STROKE);
     deskPaint.setStrokeWidth(10);
     float[] f = {20,10,10,10};
@@ -96,7 +96,7 @@ public class PaintbrushView extends View {
   * Used to set an OnMoved callback method
   * @param listener an callback for the onMoved event
   */
-  public void setOnJostickMovedListener(PaintbrushMovedListener listener) {
+  public void setOnPaintbrushMovedListener(PaintbrushMovedListener listener) {
     this.listener = listener;
   }
   
