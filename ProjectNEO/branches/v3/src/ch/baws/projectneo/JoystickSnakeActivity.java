@@ -24,18 +24,15 @@ public class JoystickSnakeActivity extends Activity implements JoystickMovedList
 		@Override
 		public void run() {
 			score.setText(Integer.toString(effect.getScore()));
-			mHandler.postDelayed(this, 100);
+			mHandler.postDelayed(this, 100); //recursive call
 		}
 	}
+	
 	private ScoreUpdater mScoreUpdater;
-	
 	private ProjectMORPHEUS application;
-	
-	HumanSnakePlayer effect;
-	
-	JoystickView jstk;
-	Button btn_newgame;
-	
+	private HumanSnakePlayer effect;
+	private JoystickView jstk;
+	private Button btn_newgame;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,23 +49,20 @@ public class JoystickSnakeActivity extends Activity implements JoystickMovedList
 		mScoreUpdater = new ScoreUpdater();
 		application = (ProjectMORPHEUS) getApplication();
 	}
-
+	
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
 		super.onDestroy();
 	}
 
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
 		super.onPause();
 		mHandler.removeCallbacks(mScoreUpdater);
 	}
 
 	@Override
 	protected void onRestart() {
-		// TODO Auto-generated method stub
 		super.onRestart();
 	}
 
@@ -83,7 +77,6 @@ public class JoystickSnakeActivity extends Activity implements JoystickMovedList
 
 	@Override
 	protected void onStart() {
-		// TODO Auto-generated method stub
 		super.onStart();
 	}
 
@@ -96,6 +89,7 @@ public class JoystickSnakeActivity extends Activity implements JoystickMovedList
 		
 	}
 
+	private static final int RTHRESHOLD = 60;
 	@Override
 	public void OnMoved(int x, int y) {
 		if(D) Log.d(TAG,"Joystick moved!");
@@ -104,7 +98,7 @@ public class JoystickSnakeActivity extends Activity implements JoystickMovedList
 		double radius = Math.sqrt(x*x+y*y);
 		//dont use the direction if it isn't very precise
 		if(D) Log.d(TAG,"Radius: " + radius);
-		if(radius<50) return;
+		if(radius<RTHRESHOLD) return;
 		//determine direction
 		if(x<y){
 			if(y>-x){
@@ -133,7 +127,7 @@ public class JoystickSnakeActivity extends Activity implements JoystickMovedList
 	@Override
 	public void OnReleased() {
 		if(D) Log.d(TAG,"+OnRelease+");
-		
+		//Pause snake?
 	}
 
 }

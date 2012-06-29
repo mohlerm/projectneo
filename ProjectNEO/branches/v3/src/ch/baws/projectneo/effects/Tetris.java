@@ -1,6 +1,7 @@
 package ch.baws.projectneo.effects;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -10,11 +11,12 @@ import ch.baws.projectneo.R;
 import ch.baws.projectneo.TetrisActivity;
 import ch.baws.projectneo.frameGenerator.Bitfields;
 import ch.baws.projectneo.frameGenerator.Frame;
+import ch.baws.projectneo.minions.NotImplementedException;
 
 public class Tetris extends Effect{
 
 	protected static final String TAG = "TETRIS";
-	protected static final boolean D = false;
+	protected static final boolean D = true;
 	
 	private long stack;	
 	private long ubrick;
@@ -106,8 +108,7 @@ public class Tetris extends Effect{
 	
 	public void rotate(){
 		
-		//TODO not working correct, don't use if not in debug mode
-		if(!D) return;
+		if(D) throw new NotImplementedException();		
 		
 		if(D) Log.d(TAG,"try to rotate");
 		
@@ -200,6 +201,18 @@ public class Tetris extends Effect{
 		stack = 0;
 		lbrick = 0;
 		newBrick();
+	}
+	
+	public int getHighestScore(){
+		Collections.sort(highscore);
+		int ret = 0;
+		if(highscore.size()>0)
+			ret = highscore.get(highscore.size()-1);
+		return ret;
+	}
+	
+	public int getScore(){
+		return score;
 	}
 	
 	

@@ -1,8 +1,7 @@
 package ch.baws.projectneo.effects;
 
 import java.util.Random;
-
-import ch.baws.projectneo.GeneralUtils;
+import ch.baws.projectneo.minions.*;
 import ch.baws.projectneo.R;
 
 public class Nexus extends Effect{
@@ -53,7 +52,7 @@ public class Nexus extends Effect{
 	
 	@Override
 	public int[][] getArray() {
-		array = GeneralUtils.emptyArray(8, 8);
+		array = Utils.emptyArray(8, 8);
 		for(int i=0;i<8;i++){
 			for(int j=0;(vStrips[i].position)>j;j++){
 				if(((vStrips[i].position-vStrips[i].length)<j)&&(j<8)){

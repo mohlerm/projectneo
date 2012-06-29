@@ -3,7 +3,7 @@ package ch.baws.projectneo.effects;
 import android.media.audiofx.Visualizer;
 import android.util.Log;
 
-import ch.baws.projectneo.GeneralUtils;
+import ch.baws.projectneo.minions.*;
 import ch.baws.projectneo.R;
 import ch.baws.projectneo.frameGenerator.Frame;
 
@@ -43,7 +43,7 @@ public class AudioVisualizer extends Effect {
 		
 		if(D) Log.d(TAG,"New Visualizer!");
 		
-		array = GeneralUtils.getEmpty8x8();
+		array = Utils.getEmpty8x8();
 	}
 	
 	@Override
@@ -132,7 +132,7 @@ public class AudioVisualizer extends Effect {
 					Log.d(TAG, "MIN/MAX: "+MIN+" / "+MAX + "    tMIN/tMAX: "+tMIN+" / "+tMAX +"    kmin/kmax:" + kmin +" / "+ kmax);
 				}
 
-				array = GeneralUtils.getEmpty8x8();
+				array = Utils.getEmpty8x8();
 				for(int i=0;i<8;i++){
 					int tempMag = magnitude[i]; 
 					if(tempMag>0.125*(MAX-MIN)+MIN){

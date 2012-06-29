@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import ch.baws.projectneo.R;
 import ch.baws.projectneo.effects.Buttons;
+import ch.baws.projectneo.minions.Utils;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -41,7 +42,7 @@ public class ProjectNEOActivity extends Activity implements OnClickListener {
         setContentView(R.layout.eff_neo);
         morpheus = (ProjectMORPHEUS) getApplication();
         
-        colorArray = GeneralUtils.emptyArray(8,8); // fills array with zeros
+        colorArray = Utils.emptyArray(8,8); // fills array with zeros
         
         btn_reset = (Button) findViewById(R.id.btn_reset);
         btn_reset.setOnClickListener(this);
@@ -262,7 +263,7 @@ public class ProjectNEOActivity extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		if(v.getId()!=R.id.btn_reset) return; //wasn't the reset button...
-		colorArray = GeneralUtils.emptyArray(8,8);
+		colorArray = Utils.emptyArray(8,8);
 		buttoneffect.setArray(colorArray);
 		resetColor();
 	}	

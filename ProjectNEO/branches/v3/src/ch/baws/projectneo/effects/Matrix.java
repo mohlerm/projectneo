@@ -5,7 +5,7 @@ import java.util.Random;
 import android.util.Log;
 import ch.baws.projectneo.effects.Effect.DialogOptions;
 import ch.baws.projectneo.frameGenerator.*;
-import ch.baws.projectneo.GeneralUtils;
+import ch.baws.projectneo.minions.*;
 import ch.baws.projectneo.R;
 
 public class Matrix extends Effect{
@@ -68,7 +68,7 @@ public class Matrix extends Effect{
 				}
 			}
 			
-			tmparray = GeneralUtils.getEmpty8x8();
+			tmparray = Utils.getEmpty8x8();
 			for(int i=0;i<8;i++){
 				for(int j=0;(strips[i].position)>j;j++){
 					if(((strips[i].position-strips[i].length)<j)&&(j<8)){

@@ -1,6 +1,6 @@
 package ch.baws.projectneo.effects;
 
-import ch.baws.projectneo.GeneralUtils;
+import ch.baws.projectneo.minions.*;
 import ch.baws.projectneo.R;
 
 /**
@@ -111,13 +111,13 @@ public abstract class Effect extends Thread{
 	 * @param title title / short description of the calling Effect (e.g. 'My awesome Effect')
 	 */
 	public Effect(String author,String title){
-		this.array = GeneralUtils.emptyArray(8, 8);
+		this.array = Utils.emptyArray(8, 8);
 		this.AUTHOR = author;
 		this.TITLE = title;
 	}
 	
 	public Effect(){
-		this.array = GeneralUtils.emptyArray(8, 8);
+		this.array = Utils.emptyArray(8, 8);
 		AUTHOR = "Brownie";
 		TITLE = "GENERIC";	
 	}

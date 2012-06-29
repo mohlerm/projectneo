@@ -21,37 +21,42 @@ import android.view.View;
  * @author thomas
  *
  */
-public class JoystickView extends View {
+public class PaintbrushView extends View {
 
   // =========================================
   // Private Members
   // =========================================
 
-  private final String TAG = "JoystickView";
-  private Paint circlePaint;
-  private Paint handlePaint;
+  private final String TAG = "PBView";
+  
+  private Paint deskPaint;
+  
+  private Paint brushPaint;
+  
   private double touchX, touchY;
   private int innerPadding;
-  private int handleRadius;
-  private int handleInnerBoundaries;
-  private JoystickMovedListener listener;
+  private int brushRadius;
+  private int brushInnerBoundaries;
+  private PaintbrushMovedListener listener;
   private int sensitivity;
+  
+  private boolean pressed;
 
   // =========================================
   // Constructors
   // =========================================
 
-  public JoystickView(Context context) {
+  public PaintbrushView(Context context) {
     super(context);
     initJoystickView();
   }
 
-  public JoystickView(Context context, AttributeSet attrs) {
+  public PaintbrushView(Context context, AttributeSet attrs) {
     super(context, attrs);
     initJoystickView();
   }
 
-  public JoystickView(Context context, AttributeSet attrs, int defStyle) {
+  public PaintbrushView(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
     initJoystickView();
   }
@@ -64,23 +69,24 @@ public class JoystickView extends View {
     setFocusable(true);
     int px = getMeasuredWidth() / 2;
     int py = getMeasuredHeight() / 2;
-    circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    circlePaint.setColor(Color.GRAY);
-    circlePaint.setStrokeWidth(1);
-    circlePaint.setStyle(Paint.Style.STROKE);
-    circlePaint.setStrokeWidth(10);
+    deskPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    deskPaint.setColor(Color.GRAY);
+    deskPaint.setStrokeWidth(1);
+    deskPaint.setStyle(Paint.Style.STROKE);
+    deskPaint.setStrokeWidth(10);
     float[] f = {20,10,10,10};
-    circlePaint.setPathEffect(new DashPathEffect(f, 0));
+    deskPaint.setPathEffect(new DashPathEffect(f, 0));
 
-    handlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    handlePaint.setColor(Color.argb(128, 0, 0, 255));
-    handlePaint.setMaskFilter(new BlurMaskFilter(15, Blur.NORMAL));
-    handlePaint.setShader(new RadialGradient((float)touchX + px, (float)touchY+py, handleRadius*2, Color.BLUE, Color.argb(128, 0, 0, 255), Shader.TileMode.CLAMP));
-    handlePaint.setStrokeWidth(3);
-    handlePaint.setStyle(Paint.Style.FILL_AND_STROKE);
+    brushPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    brushPaint.setColor(Color.argb(128, 0, 0, 255));
+    brushPaint.setMaskFilter(new BlurMaskFilter(15, Blur.NORMAL));
+    brushPaint.setShader(new RadialGradient((float)touchX + px, (float)touchY+py, brushRadius*2, Color.BLUE, Color.argb(128, 0, 0, 255), Shader.TileMode.CLAMP));
+    brushPaint.setStrokeWidth(3);
+    brushPaint.setStyle(Paint.Style.FILL_AND_STROKE);
 
     innerPadding = 10;
     sensitivity = 100;
+    pressed = false;
   }
 
   // =========================================
@@ -90,7 +96,7 @@ public class JoystickView extends View {
   * Used to set an OnMoved callback method
   * @param listener an callback for the onMoved event
   */
-  public void setOnJostickMovedListener(JoystickMovedListener listener) {
+  public void setOnJostickMovedListener(PaintbrushMovedListener listener) {
     this.listener = listener;
   }
   
@@ -105,8 +111,8 @@ public class JoystickView extends View {
     int measuredHeight = measure(heightMeasureSpec);
     int d = Math.min(measuredWidth, measuredHeight);
 
-    handleRadius = (int)(d * 0.25);
-    handleInnerBoundaries = handleRadius;
+    brushRadius = (int)(d * 0.15);
+    brushInnerBoundaries = brushRadius;
     setMeasuredDimension(d, d);
   }
 
@@ -128,16 +134,21 @@ public class JoystickView extends View {
 
   @Override
   protected void onDraw(Canvas canvas) {
-    int px = getMeasuredWidth() / 2;
-    int py = getMeasuredHeight() / 2;
-    float radius = (float) (Math.min(px, py) * 0.7);
+    int sx = getMeasuredWidth();
+    int sy = getMeasuredHeight();
+    
+    int s = Math.min(sx, sy);
+    
+    //float radius = (float) (Math.min(px, py) * 0.7);
 
     // Draw the background
-    canvas.drawCircle(px, py, radius - innerPadding, circlePaint);
+    //canvas.drawCircle(px, py, radius - innerPadding, circlePaint);
+    
+    canvas.drawRect(0, s, s, 0, deskPaint);
 
     
-    // Draw the handle
-    canvas.drawCircle((int) touchX + px, (int) touchY + py, handleRadius,handlePaint);
+    // Draw the brush
+    canvas.drawCircle((int) touchX + sx/2, (int) touchY + sy/2, brushRadius,brushPaint);
 
     canvas.save();
   }
@@ -146,58 +157,28 @@ public class JoystickView extends View {
   public boolean onTouchEvent(MotionEvent event) {
     int actionType = event.getAction();
     if (actionType == MotionEvent.ACTION_MOVE) {
-      int px = getMeasuredWidth() / 2;
-      int py = getMeasuredHeight() / 2;
-      int radius = Math.min(px, py) - handleInnerBoundaries; //maximum radius of inner thing
+      int sx = getMeasuredWidth();
+      int sy = getMeasuredHeight();
       
-      touchX = (event.getX() - px);
-      touchY = (event.getY() - py);
-      //touchX = Math.max(Math.min(touchX, radius), -radius);
-      //touchY = Math.max(Math.min(touchY, radius), -radius);
+      touchX = (event.getX());
+      touchY = (event.getY());
       
-      double rad = Math.sqrt(touchX*touchX+touchY*touchY);
-      if(Double.compare(rad, radius)>0){
-	      touchX *= radius/rad;
-	      touchY *= radius/rad;
-	      rad = radius;
-      }
+      touchX = Math.max(Math.min(touchX, sx), 0); //stay in bounds
+      touchY = Math.max(Math.min(touchY, sy), 0);
       
       // Coordinates
       Log.d(TAG, "X:" + touchX + "|Y:" + touchY);
 
       // Pressure
       if (listener != null) {
-        listener.OnMoved((int) (touchX / radius * sensitivity), (int) (touchY  / radius * sensitivity));
+        listener.OnMoved((int) (touchX/sx * 8), (int) (touchY/sy * 8));
       }
-
+      pressed = true;
       invalidate();
     } else if (actionType == MotionEvent.ACTION_UP) {
-      returnHandleToCenter();
+      pressed = false;
       Log.d(TAG, "X:" + touchX + "|Y:" + touchY);
     }
     return true;
-  }
-
-  private void returnHandleToCenter() {
-
-    Handler handler = new Handler();
-    int numberOfFrames = 5;
-    final double intervalsX = (0 - touchX) / numberOfFrames;
-    final double intervalsY = (0 - touchY) / numberOfFrames;
-
-    for (int i = 0; i < numberOfFrames; i++) {
-      handler.postDelayed(new Runnable() {
-        @Override
-        public void run() {
-          touchX += intervalsX;
-          touchY += intervalsY;
-          invalidate();
-        }
-      }, i * 40);
-    }
-
-    if (listener != null) {
-      listener.OnReleased();
-    }
   }
 }

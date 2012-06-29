@@ -5,7 +5,7 @@ import java.util.Date;
 import android.util.Log;
 
 import ch.baws.projectneo.frameGenerator.*;
-import ch.baws.projectneo.GeneralUtils;
+import ch.baws.projectneo.minions.*;
 import ch.baws.projectneo.R;
 //doesn't work^^
 public class BinaryClock extends Effect{
@@ -17,7 +17,7 @@ public class BinaryClock extends Effect{
 		this.icon = R.drawable.ic_eff_binaryclock;
 		if(D) Log.d(TAG,"New Binary Clock!");
 		this.hasOnLongClickOptions = true;
-		array = GeneralUtils.getEmpty8x8();
+		array = Utils.getEmpty8x8();
 	}
 	
 	public void setColor(int color){
@@ -44,7 +44,7 @@ public class BinaryClock extends Effect{
 	public void run() {
 
 		while(!EXIT){
-			array = GeneralUtils.getEmpty8x8();
+			array = Utils.getEmpty8x8();
 			Date date = Calendar.getInstance().getTime();
 			int hours = date.getHours();
 			int minutes = date.getMinutes();

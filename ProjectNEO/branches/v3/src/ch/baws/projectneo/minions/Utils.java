@@ -1,10 +1,10 @@
-package ch.baws.projectneo;
+package ch.baws.projectneo.minions;
 
 import java.util.Random;
 
 import android.util.Log;
 
-public class GeneralUtils {
+public class Utils {
 	
 	private static final String TAG = "GENERALUTILS";
 	private static final boolean D = false;

@@ -1,6 +1,4 @@
 package ch.baws.projectneo.minions;
-
-import ch.baws.projectneo.GeneralUtils;
 import ch.baws.projectneo.effects.Effect;
 import ch.baws.projectneo.frameGenerator.Bitfields;
 
@@ -11,9 +9,10 @@ public class FancyCurtain extends Effect{
 	private long bf;
 	
 	public FancyCurtain(int color,int duration){
-		array = GeneralUtils.getEmpty8x8();
+		array = Utils.getEmpty8x8();
 		speed = duration/9;
 		bf=0;
+		throw new NotImplementedException(); //TODO
 	}
 	@Override
 	public void run(){

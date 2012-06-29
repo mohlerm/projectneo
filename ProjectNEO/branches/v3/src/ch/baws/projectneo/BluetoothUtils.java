@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import ch.baws.projectneo.frameGenerator.Frame;
 import ch.baws.projectneo.frameGenerator.PacketGenerator;
+import ch.baws.projectneo.minions.NotImplementedException;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -46,17 +47,14 @@ public class BluetoothUtils {
 	 * initializes the BT connection
 	 */
 	public BluetoothUtils(){
-        if (D)
-        	Log.d(TAG, "+++ Init +++");
+        if (D) Log.d(TAG, "+++ Init +++");
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-		if (D)
-        	Log.d(TAG, " Inited...");
+		if (D) Log.d(TAG, " Inited...");
 	}
 	
 	public static boolean active()
 	{
-        if (D)
-        	Log.e(TAG, "+++ Active +++");
+        if (D)	Log.e(TAG, "+++ Active +++");
 		return BluetoothAdapter.getDefaultAdapter().isEnabled();
 	}
 	
@@ -67,8 +65,7 @@ public class BluetoothUtils {
 	 */
 	public boolean test()
 	{
-		//TODO
-		return false;
+		throw new NotImplementedException();
 	}
 	
 	/**

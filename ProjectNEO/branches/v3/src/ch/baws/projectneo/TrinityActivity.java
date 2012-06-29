@@ -61,11 +61,6 @@ public class TrinityActivity extends Activity{
 		effects.add(Wave.class);
 		effects.add(Colorfield.class);
 		
-		if(D){ // Effects that aren't currently very stable/working
-			effects.add(RandomSnakePlayer.class); 	//TODO is to stupid, please fix
-			effects.add(SnakePlayer.class);			//TODO has a Deadlock...
-		}
-		
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	
 	}
 	

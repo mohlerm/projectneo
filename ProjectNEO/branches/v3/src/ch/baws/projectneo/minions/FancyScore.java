@@ -4,6 +4,9 @@ import ch.baws.projectneo.frameGenerator.Bitfields;
 import ch.baws.projectneo.frameGenerator.Frame;
 
 public class FancyScore {
+	public FancyScore(){
+		throw new NotImplementedException();
+	}
 	// these ciphers are alinged to the left of a 8x8 Bitfield
 	// they are at maximum 6 pixel high and 4 wide
 	// ciphers[0] represents a 0 and ciphers[9] a 9 and so on

@@ -3,14 +3,10 @@ package ch.baws.projectneo.effects;
 import java.util.Random;
 
 import android.util.Log;
-
-import ch.baws.projectneo.GeneralUtils;
-import ch.baws.projectneo.HumanSnakeActivity;
+import ch.baws.projectneo.minions.*;
 import ch.baws.projectneo.JoystickSnakeActivity;
 import ch.baws.projectneo.R;
-import ch.baws.projectneo.SnakeActivity;
 import ch.baws.projectneo.frameGenerator.Frame;
-import ch.baws.projectneo.minions.FancyScore;
 
 
 
@@ -68,7 +64,7 @@ public class HumanSnakePlayer extends Effect{
 		
 		public Snake(){
 			rand = new Random();
-			array = GeneralUtils.getEmpty8x8();
+			array = Utils.getEmpty8x8();
 			create();
 		}
 		
@@ -154,7 +150,7 @@ public class HumanSnakePlayer extends Effect{
 				
 				// Since the snake doesn't change till the next tick, we might as
 				// well compute the array once and for all, so the call getArray() doesn't need to do anything
-				int[][] tmparray = GeneralUtils.getEmpty8x8();
+				int[][] tmparray = Utils.getEmpty8x8();
 				BodyPart temp = head;
 				if(D) Log.d(TAG,"GET ARRAY: starting");
 				tmparray[food.x][food.y] = COLOR_FOOD;
