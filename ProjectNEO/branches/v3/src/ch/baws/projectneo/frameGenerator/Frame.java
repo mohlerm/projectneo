@@ -13,10 +13,10 @@ public class Frame {
 	public static final int NEO_YELLOW 	= 4;
 	
 	public static final int NEO_TURK 		= 5; //Alias
-	public static final int NEO_MAGENTA	= 5;
-	
+	public static final int NEO_CYAN 		= 5;
+
 	public static final int NEO_PINK 		= 6; //Alias
-	public static final int NEO_CYAN 		= 6;
+	public static final int NEO_MAGENTA		= 6;
 	
 	public static final int NEO_WHITE 	= 7;
 

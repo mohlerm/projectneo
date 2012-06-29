@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
+import android.graphics.PathEffect;
 import android.graphics.RadialGradient;
 import android.graphics.Shader;
 import android.graphics.BlurMaskFilter.Blur;
@@ -34,14 +35,10 @@ public class PaintbrushView extends View {
   private Paint brushPaint;
   
   private double touchX, touchY;
-  private int innerPadding;
-  private int brushRadius;
-  private int brushInnerBoundaries;
+  private int brushRadius = 50;
   private PaintbrushMovedListener listener;
-  private int sensitivity;
+  private int brushColor;
   
-  private boolean pressed;
-
   // =========================================
   // Constructors
   // =========================================
@@ -67,10 +64,8 @@ public class PaintbrushView extends View {
 
   private void initJoystickView() {
     setFocusable(true);
-    int px = getMeasuredWidth() / 2;
-    int py = getMeasuredHeight() / 2;
     deskPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    deskPaint.setColor(Color.TRANSPARENT);
+    deskPaint.setColor(Color.BLACK);
     deskPaint.setStrokeWidth(10);
     deskPaint.setStyle(Paint.Style.STROKE);
     deskPaint.setStrokeWidth(10);
@@ -78,15 +73,11 @@ public class PaintbrushView extends View {
     deskPaint.setPathEffect(new DashPathEffect(f, 0));
 
     brushPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    brushPaint.setColor(Color.argb(128, 0, 0, 255));
+    brushPaint.setColor(Color.argb(128,255,0,0));
     brushPaint.setMaskFilter(new BlurMaskFilter(15, Blur.NORMAL));
-    brushPaint.setShader(new RadialGradient((float)touchX + px, (float)touchY+py, brushRadius*2, Color.BLUE, Color.argb(128, 0, 0, 255), Shader.TileMode.CLAMP));
-    brushPaint.setStrokeWidth(3);
+    //brushPaint.setShader(new RadialGradient((float)touchX + px, (float)touchY+py, brushRadius*2, Color.BLUE, Color.argb(128, 0, 0, 255), Shader.TileMode.CLAMP));
+    brushPaint.setStrokeWidth(5);
     brushPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-
-    innerPadding = 10;
-    sensitivity = 100;
-    pressed = false;
   }
 
   // =========================================
@@ -100,6 +91,10 @@ public class PaintbrushView extends View {
     this.listener = listener;
   }
   
+  public void setBrushColor(int color){
+	  this.brushColor = color;
+  }
+  
   // =========================================
   // Drawing Functionality 
   // =========================================
@@ -111,8 +106,8 @@ public class PaintbrushView extends View {
     int measuredHeight = measure(heightMeasureSpec);
     int d = Math.min(measuredWidth, measuredHeight);
 
-    brushRadius = (int)(d * 0.15);
-    brushInnerBoundaries = brushRadius;
+    brushRadius = (int)(d * 0.05);
+    brushRadius = Math.max(brushRadius, 10);
     setMeasuredDimension(d, d);
   }
 
@@ -143,13 +138,14 @@ public class PaintbrushView extends View {
 
     // Draw the background
     //canvas.drawCircle(px, py, radius - innerPadding, circlePaint);
-    
-    canvas.drawRect(0, s, s, 0, deskPaint);
-
-    
+    try{
+    	canvas.drawRect(10, s-10, s-10, 10, deskPaint);
+    }catch(Exception e){
+    	Log.e(TAG,"can't draw rectangle");
+    }
     // Draw the brush
-    canvas.drawCircle((int) touchX + sx/2, (int) touchY + sy/2, brushRadius,brushPaint);
-
+    brushPaint.setColor(brushColor);
+    canvas.drawCircle((int) touchX, (int) touchY, brushRadius,brushPaint);
     canvas.save();
   }
 
@@ -171,12 +167,10 @@ public class PaintbrushView extends View {
 
       // Pressure
       if (listener != null) {
-        listener.OnMoved((int) (touchX/sx * 8), (int) (touchY/sy * 8));
+        listener.OnMoved((int) ((touchX)/sx * 8), (int) ((touchY)/sy * 8));
       }
-      pressed = true;
       invalidate();
     } else if (actionType == MotionEvent.ACTION_UP) {
-      pressed = false;
       Log.d(TAG, "X:" + touchX + "|Y:" + touchY);
     }
     return true;

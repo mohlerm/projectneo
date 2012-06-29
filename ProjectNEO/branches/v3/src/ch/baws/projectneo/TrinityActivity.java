@@ -3,7 +3,6 @@ package ch.baws.projectneo;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -12,7 +11,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.media.audiofx.AudioEffect;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,22 +21,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.animation.AnticipateInterpolator;
-import android.view.animation.Interpolator;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 import ch.baws.projectneo.effects.*;
 import ch.baws.projectneo.effects.Effect.DialogOptions;
-import ch.baws.projectneo.frameGenerator.Frame;
 import ch.baws.projectneo.sendService.SendService;
 
 public class TrinityActivity extends Activity{
@@ -49,6 +42,7 @@ public class TrinityActivity extends Activity{
 	//+++++++++++++++++++ List all available Effects ++++++++++++++++++
 		effects.add(AudioVisualizer.class);
 		effects.add(Text.class);
+		effects.add(PaintEffect.class);
 		effects.add(Buttons.class);
 		effects.add(Matrix.class);
 		effects.add(Nexus.class);

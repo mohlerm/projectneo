@@ -1,7 +1,7 @@
 package ch.baws.projectneo.mario;
 
-import ch.baws.projectneo.GeneralUtils;
 import ch.baws.projectneo.effects.Effect;
+import ch.baws.projectneo.minions.Utils;
 
 public class MarioEffect extends Effect{
 
@@ -10,7 +10,7 @@ public class MarioEffect extends Effect{
 	
 	public MarioEffect(){
 		super("Thomas Richner","YAMario Alpha");
-		array = GeneralUtils.getEmpty8x8();
+		array = Utils.getEmpty8x8();
 		game = new MarioGame(StaticMaps.level1_1);
 	}
 	

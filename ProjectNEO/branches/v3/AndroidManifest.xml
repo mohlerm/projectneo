@@ -23,7 +23,7 @@
         <activity android:label="Tetris" android:name=".TetrisActivity" android:icon="@drawable/ic_eff_tetris"></activity>
         <activity android:name=".JoystickSnakeActivity" android:label="Snake!" android:icon="@drawable/ic_eff_snake" android:screenOrientation="portrait"></activity>
         <activity android:screenOrientation="landscape" android:name=".MarioActivity" android:label="Mario"></activity>
-        <activity android:name="PaintActivity" android:label="Paint"></activity>
+        <activity android:name="PaintActivity" android:label="Paint" android:screenOrientation="portrait" android:icon="@drawable/ic_eff_paint"></activity>
         
 
     </application>
