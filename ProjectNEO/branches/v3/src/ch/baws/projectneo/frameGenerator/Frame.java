@@ -2,6 +2,8 @@ package ch.baws.projectneo.frameGenerator;
 
 import java.util.Random;
 
+import android.graphics.Color;
+
 
 
 public class Frame {
@@ -19,6 +21,8 @@ public class Frame {
 	public static final int NEO_MAGENTA		= 6;
 	
 	public static final int NEO_WHITE 	= 7;
+	
+	public static final int[] NEO_COLOR_LST = {Color.BLACK,Color.RED,Color.GREEN,Color.BLUE,Color.YELLOW,Color.CYAN,Color.MAGENTA,Color.WHITE};
 
 	public enum CMDB {
 		/* Possible command bytes: 

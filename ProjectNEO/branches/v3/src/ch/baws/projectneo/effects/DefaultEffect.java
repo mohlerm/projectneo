@@ -12,7 +12,14 @@ public class DefaultEffect extends Effect{
 
 	@Override
 	public void run() {
-		effect.run();		
+		effect.run();
+		while(!EXIT){
+			try {
+				sleep(999999);
+			} catch (InterruptedException e) {
+			}
+		}
+		effect.exit();
 	}
 
 }

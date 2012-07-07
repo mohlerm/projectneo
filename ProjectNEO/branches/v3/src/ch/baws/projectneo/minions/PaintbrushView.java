@@ -1,17 +1,9 @@
 package ch.baws.projectneo.minions;
 
+import ch.baws.projectneo.frameGenerator.Frame;
 import android.content.Context;
-import android.graphics.BlurMaskFilter;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.DashPathEffect;
-import android.graphics.Paint;
-import android.graphics.PathEffect;
-import android.graphics.RadialGradient;
-import android.graphics.Shader;
+import android.graphics.*;
 import android.graphics.BlurMaskFilter.Blur;
-import android.location.Criteria;
-import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -29,6 +21,7 @@ public class PaintbrushView extends View {
   // =========================================
 
   private final String TAG = "PBView";
+  private final boolean D = true;
   
   private Paint deskPaint;
   
@@ -38,6 +31,10 @@ public class PaintbrushView extends View {
   private int brushRadius = 50;
   private PaintbrushMovedListener listener;
   private int brushColor;
+  
+  private int[][] painting;
+  
+  private Paint[] colorPoint;
   
   // =========================================
   // Constructors
@@ -64,6 +61,9 @@ public class PaintbrushView extends View {
 
   private void initJoystickView() {
     setFocusable(true);
+    
+    painting = Utils.getEmpty8x8();
+    
     deskPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     deskPaint.setColor(Color.BLACK);
     deskPaint.setStrokeWidth(10);
@@ -71,6 +71,13 @@ public class PaintbrushView extends View {
     deskPaint.setStrokeWidth(10);
     float[] f = {20,10,10,10};
     deskPaint.setPathEffect(new DashPathEffect(f, 0));
+   
+    for(int i=0;i<7;i++){
+    	colorPoint[i] = new Paint(Paint.ANTI_ALIAS_FLAG);
+    	colorPoint[i].setColor(Frame.NEO_COLOR_LST[i]);
+    	colorPoint[i].setStyle(Paint.Style.FILL);
+    	colorPoint[i].setMaskFilter(new BlurMaskFilter(5,Blur.NORMAL));
+    }
 
     brushPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     brushPaint.setColor(Color.argb(128,255,0,0));
@@ -93,6 +100,15 @@ public class PaintbrushView extends View {
   
   public void setBrushColor(int color){
 	  this.brushColor = color;
+  }
+  
+  public void setPainting(int[][] painting){
+	  this.painting = painting;
+	  invalidate();
+  }
+  
+  public void setPoint(int x,int y,int color){
+	  throw new NotImplementedException();
   }
   
   // =========================================
@@ -134,12 +150,24 @@ public class PaintbrushView extends View {
     
     int s = Math.min(sx, sy);
     
+    int boarder = 10;
+    
+    int pradius = (int) (sx/16.0);
+    
     //float radius = (float) (Math.min(px, py) * 0.7);
 
     // Draw the background
     //canvas.drawCircle(px, py, radius - innerPadding, circlePaint);
     try{
-    	canvas.drawRect(10, s-10, s-10, 10, deskPaint);
+    	canvas.drawRect(boarder, s-boarder, s-boarder, boarder, deskPaint);
+    	for(int i=0;i<7;i++){
+        	for(int j=0;j<7;j++){
+        		int c = painting[i][j];
+        		if(c>7 || c<0) c = 0;
+        		if(D) Log.d(TAG, "Drawing the picture");
+        		canvas.drawCircle(boarder+pradius*i, boarder+pradius*j, pradius, colorPoint[c]);
+        	}
+    	}
     }catch(Exception e){
     	Log.e(TAG,"can't draw rectangle");
     }
@@ -163,7 +191,7 @@ public class PaintbrushView extends View {
       touchY = Math.max(Math.min(touchY, sy), 0);
       
       // Coordinates
-      Log.d(TAG, "X:" + touchX + "|Y:" + touchY);
+      if(D) Log.d(TAG, "X:" + touchX + "|Y:" + touchY);
 
       // Pressure
       if (listener != null) {
@@ -171,7 +199,7 @@ public class PaintbrushView extends View {
       }
       invalidate();
     } else if (actionType == MotionEvent.ACTION_UP) {
-      Log.d(TAG, "X:" + touchX + "|Y:" + touchY);
+      if(D) Log.d(TAG, "X:" + touchX + "|Y:" + touchY);
     }
     return true;
   }
